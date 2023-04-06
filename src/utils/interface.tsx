@@ -3,7 +3,7 @@ interface IAwards {
   nominations: Number;
   text: String;
 }
-export default interface IMovie {
+export interface IMovie {
   _id: string;
   plot: String;
   genres: [String];

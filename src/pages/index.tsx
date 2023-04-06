@@ -4,25 +4,27 @@ import { Inter } from "next/font/google";
 import { useState } from "react";
 import Link from "next/link";
 import Pagination from "../component/pagination";
-import IMovie from "@/utils/interface";
+import { IMovie } from "@/utils/interface";
 // import styles from "@/styles/Home.module.css";
 import MovieCard from "../component/movieCard/MovieCard";
 import { paginate } from "@/utils/pagination";
 import Navbar from "@/component/navbar";
 const inter = Inter({ subsets: ["latin"] });
- 
+
 interface IMovies {
   movies: IMovie[];
+  pagination: any;
 }
-export default function Home({movies}:IMovies) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
- 
-  const onPageChange = (page) => {
-    setCurrentPage(page);
-  };
+export default function Home({ movies, pagination }: IMovies) {
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const pageSize = 10;
 
-  const paginateMovies = paginate(movies, currentPage, pageSize)
+  // const onPageChange = (page: any) => {
+  //   setCurrentPage(page);
+  // };
+
+  // const paginateMovies = paginate(movies, currentPage, pageSize);
+  // console.log("pagC==", pagination.pageCount);
   return (
     <>
       <Head>
@@ -31,30 +33,31 @@ export default function Home({movies}:IMovies) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="min-h-screen bg-slate-100">
-          <Navbar/>
+      <div className="min-h-screen bg-black">
+        <Navbar />
         <div className="container mx-auto ">
-          <h1 className="font-bold  text-3xl p-4 bg-slate-300">Movies List</h1>
-          <div className=" grid  lg:grid-cols-5 gap-2 md:grid-cols-3  grid-cols-2 bg-white">
-          {paginateMovies .length > 0 &&
-          paginateMovies .map((movie: IMovie, idx) =><MovieCard key={idx} movie={movie} />)}
+          <h1 className="font-bold text-red-600 text-4xl p-4">Movies List</h1>
+          <div className=" grid  lg:grid-cols-5 gap-2 md:grid-cols-3  grid-cols-2">
+            {movies.length > 0 &&
+              movies.map((movie: IMovie, idx) => (
+                <MovieCard key={idx} movie={movie} />
+              ))}
           </div>
-          <Pagination 
-          items={movies.length} 
-          currentPage={currentPage} 
-          pageSize={pageSize} 
-          onPageChange={onPageChange}
-          />
+          <Pagination pageCount={pagination.pageCount} />
         </div>
       </div>
     </>
   );
 }
 
-export async function getServerSideProps() {
-  const res = await fetch("http://localhost:8009/movies");
+export async function getServerSideProps(ctx: any) {
+  // console.log("kk", ctx);
+  const { limit = 5, page = 2 } = ctx;
+  const res = await fetch(
+    `http://localhost:8009/movies?limit=${limit}&page=${page}`
+  );
   const data = await res.json();
   return {
-    props: { movies: data.movies },
+    props: { movies: data.movies, pagination: data.pagination },
   };
 }
