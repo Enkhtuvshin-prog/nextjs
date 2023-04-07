@@ -7,8 +7,8 @@ import Pagination from "../component/pagination";
 import { IMovie } from "@/utils/interface";
 // import styles from "@/styles/Home.module.css";
 import MovieCard from "../component/movieCard/MovieCard";
-import { paginate } from "@/utils/pagination";
 import Navbar from "@/component/navbar";
+import { useRouter } from "next/router";
 const inter = Inter({ subsets: ["latin"] });
 
 interface IMovies {
@@ -16,15 +16,22 @@ interface IMovies {
   pagination: any;
 }
 export default function Home({ movies, pagination }: IMovies) {
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const pageSize = 10;
+  const router = useRouter();
+ 
+  const [cur, setCur] = useState<number>(1);
+  const pages = [1, cur+1]
+  // const response = usePosts("1");
+  console.log("PAGE", pagination);
+  // console.log("RESP", response);
 
-  // const onPageChange = (page: any) => {
-  //   setCurrentPage(page);
-  // };
-
-  // const paginateMovies = paginate(movies, currentPage, pageSize);
-  // console.log("pagC==", pagination.pageCount);
+  const handlePagination = (action: string) => {
+    if (action === "next") {
+      router.replace(`?limit=4&page=${pagination.page + 1}`);
+    } else {
+      router.replace(`?limit=4&page=${pagination.page - 1}`);
+    }
+  };
+ 
   return (
     <>
       <Head>
@@ -43,7 +50,16 @@ export default function Home({ movies, pagination }: IMovies) {
                 <MovieCard key={idx} movie={movie} />
               ))}
           </div>
-          <Pagination pageCount={pagination.pageCount} />
+          <Pagination 
+          pages={pages}
+          cur={pagination.page}
+          nextPage={() => {
+            handlePagination("next");
+          }}
+          prevPage={() => {
+            handlePagination("prev");
+          }}
+          />
         </div>
       </div>
     </>
@@ -52,10 +68,14 @@ export default function Home({ movies, pagination }: IMovies) {
 
 export async function getServerSideProps(ctx: any) {
   // console.log("kk", ctx);
-  const { limit = 5, page = 2 } = ctx;
+  const { page, limit } = ctx.query;
   const res = await fetch(
-    `http://localhost:8009/movies?limit=${limit}&page=${page}`
+    `http://localhost:8009/movies?limit=${limit || 4}&page=${page || 1}`
   );
+  // const { limit, page } = ctx;
+  // const res = await fetch(
+  //   `http://localhost:8009/movies?limit=${limit}&page=${page}`
+  // );
   const data = await res.json();
   return {
     props: { movies: data.movies, pagination: data.pagination },
