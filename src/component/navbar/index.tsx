@@ -1,6 +1,12 @@
 import React from "react";
 
-const navData = ["movies", "TV shows", "Movie Trivia", "News", "ShowTimes"];
+const navData: String[] = [
+  "movies",
+  "TV shows",
+  "Movie Trivia",
+  "News",
+  "ShowTimes",
+];
 
 const Navbar = () => {
   return (
@@ -48,18 +54,18 @@ const Navbar = () => {
             className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
             id="navbar-cta"
           >
-            <ul className="flex flex-col text-lg p-4 md:p-0 mt-4 border  rounded-lg  md:flex-row md:space-x-8 md:mt-0 md:border-0 ">
-              {/* {navData.map(data)=>(
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-                  aria-current="page"
-                >
-                  {data}
-                </a>
-              </li>
-              )} */}
+            <ul className="flex flex-col text-sm p-2 md:p-0 mt-4 border  rounded-lg  md:flex-row md:space-x-8 md:mt-0 md:border-0 ">
+              {navData.map((data: any) => (
+                <li>
+                  <a
+                    href="#"
+                    className="block py-2  text-white"
+                    aria-current="page"
+                  >
+                    {data}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

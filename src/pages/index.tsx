@@ -9,6 +9,7 @@ import { IMovie } from "@/utils/interface";
 import MovieCard from "../component/movieCard/MovieCard";
 import Navbar from "@/component/navbar";
 import { useRouter } from "next/router";
+import NavLayout from "@/layout/intex";
 const inter = Inter({ subsets: ["latin"] });
 
 interface IMovies {
@@ -20,15 +21,16 @@ export default function Home({ movies, pagination }: IMovies) {
 
   const [cur, setCur] = useState<number>(1);
   const pages = [1, cur + 1];
+
   // const response = usePosts("1");
   console.log("PAGE", pagination);
   // console.log("RESP", response);
 
   const handlePagination = (action: string) => {
     if (action === "next") {
-      router.replace(`?limit=4&page=${pagination.page + 1}`);
+      router.replace(`?limit=10&page=${pagination.page + 1}`);
     } else {
-      router.replace(`?limit=4&page=${pagination.page - 1}`);
+      router.replace(`?limit=10&page=${pagination.page - 1}`);
     }
   };
 
@@ -41,7 +43,6 @@ export default function Home({ movies, pagination }: IMovies) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="min-h-screen bg-black">
-        <Navbar />
         <div className="container mx-auto ">
           <h1 className="font-bold text-red-600 text-4xl p-4">
             Киноны жагсаалт
@@ -55,6 +56,7 @@ export default function Home({ movies, pagination }: IMovies) {
           <Pagination
             pages={pages}
             cur={pagination.page}
+            pageCount={pagination.pageCount}
             nextPage={() => {
               handlePagination("next");
             }}
