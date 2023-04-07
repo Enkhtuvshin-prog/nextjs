@@ -17,9 +17,9 @@ interface IMovies {
 }
 export default function Home({ movies, pagination }: IMovies) {
   const router = useRouter();
- 
+
   const [cur, setCur] = useState<number>(1);
-  const pages = [1, cur+1]
+  const pages = [1, cur + 1];
   // const response = usePosts("1");
   console.log("PAGE", pagination);
   // console.log("RESP", response);
@@ -31,7 +31,7 @@ export default function Home({ movies, pagination }: IMovies) {
       router.replace(`?limit=4&page=${pagination.page - 1}`);
     }
   };
- 
+
   return (
     <>
       <Head>
@@ -50,15 +50,15 @@ export default function Home({ movies, pagination }: IMovies) {
                 <MovieCard key={idx} movie={movie} />
               ))}
           </div>
-          <Pagination 
-          pages={pages}
-          cur={pagination.page}
-          nextPage={() => {
-            handlePagination("next");
-          }}
-          prevPage={() => {
-            handlePagination("prev");
-          }}
+          <Pagination
+            pages={pages}
+            cur={pagination.page}
+            nextPage={() => {
+              handlePagination("next");
+            }}
+            prevPage={() => {
+              handlePagination("prev");
+            }}
           />
         </div>
       </div>
@@ -69,8 +69,10 @@ export default function Home({ movies, pagination }: IMovies) {
 export async function getServerSideProps(ctx: any) {
   // console.log("kk", ctx);
   const { page, limit } = ctx.query;
+  console.log("limit", limit);
+
   const res = await fetch(
-    `http://localhost:8009/movies?limit=${limit || 4}&page=${page || 1}`
+    `http://localhost:8009/movies?limit=${limit || 6}&page=${page || 1}`
   );
   // const { limit, page } = ctx;
   // const res = await fetch(
