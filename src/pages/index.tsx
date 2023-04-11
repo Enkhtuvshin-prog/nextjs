@@ -42,7 +42,7 @@ export default function Home({ movies, pagination }: IMovies) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen">
         <div className="container mx-auto ">
           <h1 className="font-bold text-red-600 text-4xl p-4">
             Киноны жагсаалт
@@ -53,6 +53,8 @@ export default function Home({ movies, pagination }: IMovies) {
                 <MovieCard key={idx} movie={movie} />
               ))}
           </div>
+          
+          
           <Pagination
             pages={pages}
             cur={pagination.page}
